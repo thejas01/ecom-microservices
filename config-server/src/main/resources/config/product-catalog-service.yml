@@ -1,0 +1,63 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: product-catalog-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/product_db
+    username: ecommerce_user
+    password: ecommerce_pass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        enable_lazy_load_no_trans: true
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 7200000 # 2 hours
+      cache-null-values: false
+
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 5s
+    socket-timeout: 30s
+
+kafka:
+  topics:
+    product-created: product-created-topic
+    product-updated: product-updated-topic
+    product-deleted: product-deleted-topic
+    price-updated: price-updated-topic
+    category-updated: category-updated-topic
+
+product:
+  image:
+    max-size: 10485760 # 10MB
+    allowed-types: image/jpeg,image/png,image/webp
+    storage-path: /var/ecommerce/product-images
+  search:
+    default-page-size: 20
+    max-page-size: 100
+  pricing:
+    tax-rate: 0.10 # 10%
+    currency: USD

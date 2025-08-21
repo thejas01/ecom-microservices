@@ -1,0 +1,49 @@
+# Production environment specific configuration
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+
+logging:
+  level:
+    root: WARN
+    com.ecommerce: INFO
+  file:
+    name: /var/log/ecommerce/${spring.application.name}.log
+    max-size: 10MB
+    max-history: 30
+
+# Production Kafka configuration
+spring.kafka:
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka1:9092,kafka2:9092,kafka3:9092}
+  producer:
+    acks: all
+    retries: 3
+  consumer:
+    enable-auto-commit: false
+
+# Production Redis configuration  
+spring.redis:
+  host: ${REDIS_HOST:redis-cluster}
+  port: ${REDIS_PORT:6379}
+  password: ${REDIS_PASSWORD}
+  ssl: true
+
+# Production database pool settings
+spring.datasource.hikari:
+  maximum-pool-size: 20
+  minimum-idle: 10
+  connection-timeout: 30000
+  idle-timeout: 600000
+  max-lifetime: 1800000
+
+# Enable security for production
+management:
+  endpoint:
+    health:
+      show-details: when-authorized
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

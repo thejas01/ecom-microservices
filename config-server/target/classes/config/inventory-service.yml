@@ -1,0 +1,56 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: inventory-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/inventory_db
+    username: ecommerce_user
+    password: ecommerce_pass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 1800000 # 30 minutes
+      cache-null-values: false
+
+kafka:
+  topics:
+    inventory-updated: inventory-updated-topic
+    stock-reserved: stock-reserved-topic
+    stock-released: stock-released-topic
+    low-stock-alert: low-stock-alert-topic
+    out-of-stock: out-of-stock-topic
+
+inventory:
+  reservation:
+    timeout: 900000 # 15 minutes
+    cleanup-interval: 300000 # 5 minutes
+  stock:
+    low-threshold: 10
+    reorder-point: 20
+    safety-stock: 5
+  warehouse:
+    default-location: MAIN

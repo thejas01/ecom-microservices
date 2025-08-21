@@ -1,0 +1,28 @@
+# Development environment specific configuration
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    root: INFO
+    com.ecommerce: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+# Development Kafka configuration
+spring.kafka:
+  bootstrap-servers: localhost:9092
+
+# Development Redis configuration  
+spring.redis:
+  host: localhost
+  port: 6379
+
+# Disable security for development
+management:
+  security:
+    enabled: false
