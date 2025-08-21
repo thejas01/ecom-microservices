@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    config:
+      server:
+        # Use native profile for tests to avoid Git repository requirement
+        native:
+          search-locations: classpath:/config
+        # Disable Git repository for tests
+        git:
+          uri: ""
+          skip-ssl-validation: true
+        # Set default profile to native for tests
+        default-profile: native
+
+# Disable security for tests
+security:
+  basic:
+    enabled: false
+
+# Minimal logging for tests
+logging:
+  level:
+    root: WARN
+    org.springframework.cloud.config: INFO
