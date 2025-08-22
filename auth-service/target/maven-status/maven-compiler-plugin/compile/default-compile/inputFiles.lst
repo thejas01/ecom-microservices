@@ -1,0 +1,15 @@
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/dto/LoginRequest.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/config/KafkaConfig.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/service/JwtService.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/repository/UserCredentialRepository.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/security/CustomUserDetailsService.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/controller/AuthController.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/dto/PasswordResetRequest.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/dto/LoginResponse.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/security/CustomUserDetails.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/config/SecurityConfig.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/entity/UserCredential.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/service/AuthService.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/dto/PasswordResetConfirmRequest.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/dto/RegisterRequest.java
+/Users/software/Desktop/cart/auth-service/src/main/java/com/ecommerce/auth/AuthServiceApplication.java
