@@ -1,0 +1,11 @@
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/product/CategoryDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/payment/CardDetailsDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/order/OrderItemDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/user/AddressDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/payment/PaymentDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/user/UserDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/notification/NotificationDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/order/OrderDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/product/ProductDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/user/UserResponseDTO.java
+/Users/software/Desktop/cart/common-libs/common-dto/src/main/java/com/ecommerce/common/dto/product/DimensionsDTO.java
