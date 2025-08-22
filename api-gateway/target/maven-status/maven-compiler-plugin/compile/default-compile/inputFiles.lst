@@ -1,0 +1,9 @@
+/Users/software/Desktop/cart/api-gateway/src/main/java/com/ecommerce/gateway/ApiGatewayApplication.java
+/Users/software/Desktop/cart/api-gateway/src/main/java/com/ecommerce/gateway/filter/AuthenticationFilter.java
+/Users/software/Desktop/cart/api-gateway/src/main/java/com/ecommerce/gateway/util/JwtUtil.java
+/Users/software/Desktop/cart/api-gateway/src/main/java/com/ecommerce/gateway/util/IJwtUtil.java
+/Users/software/Desktop/cart/api-gateway/src/main/java/com/ecommerce/gateway/config/CorsConfig.java
+/Users/software/Desktop/cart/api-gateway/src/main/java/com/ecommerce/gateway/config/SecurityConfig.java
+/Users/software/Desktop/cart/api-gateway/src/main/java/com/ecommerce/gateway/fallback/FallbackController.java
+/Users/software/Desktop/cart/api-gateway/src/main/java/com/ecommerce/gateway/filter/LoggingFilter.java
+/Users/software/Desktop/cart/api-gateway/src/main/java/com/ecommerce/gateway/config/GatewayConfig.java

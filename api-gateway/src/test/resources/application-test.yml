@@ -1,0 +1,26 @@
+spring:
+  cloud:
+    config:
+      enabled: false
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+  application:
+    name: api-gateway
+
+jwt:
+  secret: ThisIsATestSecretKeyThatIsAtLeast256BitsLong1234567890
+
+eureka:
+  client:
+    enabled: false
+
+server:
+  port: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
