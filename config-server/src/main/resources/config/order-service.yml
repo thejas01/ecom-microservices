@@ -6,8 +6,8 @@ spring:
     name: order-service
   datasource:
     url: jdbc:postgresql://localhost:5432/order_db
-    username: ecommerce_user
-    password: ecommerce_pass
+    username: postgres
+    password: 123456
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 15
