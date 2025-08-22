@@ -1,0 +1,5 @@
+com/ecommerce/user/UserServiceApplicationTests.class
+com/ecommerce/user/config/TestConfig.class
+com/ecommerce/user/config/SecurityTestConfig.class
+com/ecommerce/user/service/UserServiceTest.class
+com/ecommerce/user/controller/UserControllerTest.class

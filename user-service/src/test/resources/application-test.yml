@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  
+  h2:
+    console:
+      enabled: true
+  
+  flyway:
+    enabled: false
+  
+  data:
+    redis:
+      host: localhost
+      port: 6370 # Different port for test
+  
+  kafka:
+    producer:
+      bootstrap-servers: embedded
+
+# Disable Eureka for tests
+eureka:
+  client:
+    enabled: false
+
+# Test JWT configuration
+jwt:
+  secret: TestSecretKeyThatIsAtLeast256BitsLongForUserServiceTesting
+  expiration: 3600000
+
+logging:
+  level:
+    com.ecommerce.user: DEBUG
