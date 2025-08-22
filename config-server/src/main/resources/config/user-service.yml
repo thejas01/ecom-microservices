@@ -6,8 +6,8 @@ spring:
     name: user-service
   datasource:
     url: jdbc:postgresql://localhost:5432/user_db
-    username: ecommerce_user
-    password: ecommerce_pass
+    username: postgres
+    password: 123456
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
