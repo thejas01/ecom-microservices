@@ -142,3 +142,127 @@ Services use Spring Cloud Config for centralized configuration management. Confi
 ## License
 
 This project is licensed under the MIT License.
+
+
+Login Process
+
+  1. Login Endpoint
+
+  POST http://localhost:8080/api/auth/login
+  Content-Type: application/json
+
+  {
+      "usernameOrEmail": "testuser",    // You can use either username or email
+      "password": "password123"
+  }
+
+  OR with email:
+  POST http://localhost:8080/api/auth/login
+  Content-Type: application/json
+
+  {
+      "usernameOrEmail": "test@example.com",
+      "password": "password123"
+  }
+
+  2. Login Response
+
+  You'll receive a response like:
+  {
+      "success": true,
+      "message": "Login successful",
+      "data": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "userId": "some-uuid",
+          "username": "testuser",
+          "email": "test@example.com",
+          "role": "CUSTOMER"
+      },
+      "timestamp": "2025-08-22T10:52:00.123Z"
+  }
+
+  3. Using the Token
+
+  After login, save the token and use it in the Authorization header for protected endpoints:
+
+  Authorization: Bearer <your-token-here>
+
+  4. Example: Access Protected User Endpoints
+
+  Get your own profile:
+  GET http://localhost:8080/api/users/{userId}
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+  Update your profile:
+  PUT http://localhost:8080/api/users/{userId}
+  Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+  Content-Type: application/json
+
+  {
+      "firstName": "Updated Name",
+      "phoneNumber": "+1234567890"
+  }
+
+  5. Postman Setup
+
+  In Postman, after login:
+  1. Save the token in a collection variable
+  2. In the Tests tab of your login request, add:
+  pm.test("Save token", function () {
+      var jsonData = pm.response.json();
+      pm.collectionVariables.set("authToken", jsonData.data.token);
+      pm.collectionVariables.set("userId", jsonData.data.userId);
+  });
+
+  3. For protected endpoints, in the Authorization tab:
+    - Type: Bearer Token
+    - Token: {{authToken}}
+
+  This way, the token will be automatically included in all subsequent requests!
+
+
+
+  When you register or login, the response includes the userId. For example:
+
+  Registration Response:
+
+  {
+      "success": true,
+      "message": "User registered successfully",
+      "data": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "userId": "a3f4b2c1-8e9d-4f5a-b6c7-d8e9f0a1b2c3",  // <-- This is your userId
+          "username": "testuser",
+          "email": "test@example.com",
+          "role": "CUSTOMER"
+      }
+  }
+
+  Login Response:
+
+  {
+      "success": true,
+      "message": "Login successful",
+      "data": {
+          "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+          "userId": "a3f4b2c1-8e9d-4f5a-b6c7-d8e9f0a1b2c3",  // <-- Same userId
+          "username": "testuser",
+          "email": "test@example.com",
+          "role": "CUSTOMER"
+      }
+  }
+
+  How to use it:
+
+  1. Copy the userId from your login/register response
+  2. Use it in API calls, for example:
+  GET http://localhost:8080/api/users/a3f4b2c1-8e9d-4f5a-b6c7-d8e9f0a1b2c3
+  Authorization: Bearer <your-token>
+
+  In Postman:
+
+  If you set up the test script I mentioned earlier:
+  pm.collectionVariables.set("userId", jsonData.data.userId);
+
+  Then you can use {{userId}} in your requests:
+  GET http://localhost:8080/api/users/{{userId}}

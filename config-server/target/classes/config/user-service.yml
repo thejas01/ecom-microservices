@@ -43,6 +43,10 @@ kafka:
     user-deleted: user-deleted-topic
     profile-updated: profile-updated-topic
 
+jwt:
+  secret: ecommerceSecretKey2024!@#
+  expiration: 86400000 # 24 hours
+
 user:
   default:
     page-size: 20
