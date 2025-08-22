@@ -6,8 +6,8 @@ spring:
     name: product-catalog-service
   datasource:
     url: jdbc:postgresql://localhost:5432/product_db
-    username: ecommerce_user
-    password: ecommerce_pass
+    username: postgres
+    password: 123456
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 15
