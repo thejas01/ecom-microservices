@@ -8,6 +8,7 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
   datasource:
+  
     url: jdbc:postgresql://localhost:5432/e_com
     username: postgres
     password: 123456
