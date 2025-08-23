@@ -30,10 +30,22 @@ public class GatewayConfig {
                                 .filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://USER-SERVICE"))
                 
-                // Product Catalog Service - Public routes
+                // Product Catalog Service - Public GET routes
                 .route("product-catalog-service-public", r -> r
                         .path("/api/products/**", "/api/categories/**")
-                        .filters(f -> f.rewritePath("/api/(?<path>.*)", "/${path}"))
+                        .and()
+                        .method("GET")
+                        .filters(f -> f.rewritePath("/api/(?<path>.*)", "/api/${path}"))
+                        .uri("lb://PRODUCT-CATALOG-SERVICE"))
+                
+                // Product Catalog Service - Protected POST/PUT/DELETE routes  
+                .route("product-catalog-service-protected", r -> r
+                        .path("/api/products/**")
+                        .and()
+                        .method("POST", "PUT", "DELETE", "PATCH")
+                        .filters(f -> f
+                                .rewritePath("/api/(?<path>.*)", "/api/${path}")
+                                .filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://PRODUCT-CATALOG-SERVICE"))
                 
                 // Inventory Service - Protected routes
