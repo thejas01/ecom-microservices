@@ -63,11 +63,18 @@ public class GatewayConfig {
                                 .filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://INVENTORY-SERVICE"))
                 
+                // Order Service - Public health endpoint
+                .route("order-service-health", r -> r
+                        .path("/api/orders/health")
+                        .filters(f -> f
+                                .rewritePath("/api/orders/(?<path>.*)", "/orders/${path}"))
+                        .uri("lb://ORDER-SERVICE"))
+                
                 // Order Service - Protected routes
                 .route("order-service", r -> r
-                        .path("/api/orders/**")
+                        .path("/api/orders", "/api/orders/**")
                         .filters(f -> f
-                                .rewritePath("/api/orders/(?<path>.*)", "/orders/${path}")
+                                .rewritePath("/api/orders(?<path>/.*)?", "/orders${path}")
                                 .filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://ORDER-SERVICE"))
                 

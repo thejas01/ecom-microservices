@@ -13,6 +13,14 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      routes:
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/api/orders/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /${segment}
+            - name: AuthenticationFilter
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
         - name: Retry
@@ -52,4 +60,4 @@ logging:
 
 # JWT configuration
 jwt:
-  secret: ThisIsADevelopmentSecretKeyThatIsAtLeast256BitsLong1234567890
+  secret: your-super-secure-512-bit-secret-key-for-jwt-token-generation-and-validation-in-microservices
