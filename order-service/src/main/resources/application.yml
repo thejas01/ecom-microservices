@@ -1,0 +1,141 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: order-service
+  
+  config:
+    import: optional:configserver:http://localhost:8888
+  
+  profiles:
+    active: dev
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/e_com
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+        enable_lazy_load_no_trans: true
+  
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    validate-on-migrate: false
+  
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 3
+      properties:
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+    consumer:
+      group-id: order-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: "order:com.ecommerce.order.events.OrderEvent,payment:com.ecommerce.order.events.PaymentEvent"
+
+# Eureka Configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: always
+  health:
+    circuitbreakers:
+      enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    com.ecommerce.order: DEBUG
+    org.springframework.kafka: INFO
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/order-service.log
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:your-super-secure-512-bit-secret-key-for-jwt-token-generation-and-validation-in-microservices}
+  expiration: 86400000 # 24 hours
+  header: Authorization
+  prefix: Bearer
+
+# Application specific configurations
+order:
+  kafka:
+    topics:
+      order-created: order-created
+      order-updated: order-updated
+      order-cancelled: order-cancelled
+      inventory-reserve: inventory-reserve
+      inventory-reserved: inventory-reserved
+      inventory-failed: inventory-failed
+      payment-process: payment-process
+      payment-completed: payment-completed
+      payment-failed: payment-failed
+      shipment-created: shipment-created
+  
+  saga:
+    timeout-minutes: 30
+    retry-attempts: 3
+  
+  stale-order:
+    check-interval-hours: 1
+    pending-timeout-hours: 24
+    
+# Service URLs for RestTemplate
+services:
+  inventory:
+    url: http://INVENTORY-SERVICE
+  payment:
+    url: http://PAYMENT-SERVICE
+  user:
+    url: http://USER-SERVICE
+  product:
+    url: http://PRODUCT-SERVICE
