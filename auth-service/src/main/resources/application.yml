@@ -69,7 +69,7 @@ eureka:
 
 # JWT configuration
 jwt:
-  secret: ThisIsADevelopmentSecretKeyThatIsAtLeast256BitsLong1234567890
+  secret: your-super-secure-512-bit-secret-key-for-jwt-token-generation-and-validation-in-microservices
   expiration: 86400000 # 24 hours
 
 management:

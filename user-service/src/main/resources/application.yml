@@ -105,7 +105,7 @@ management:
 
 # JWT Configuration
 jwt:
-  secret: ThisIsAVeryLongSecretKeyThatIsAtLeast256BitsLongForUserService
+  secret: your-super-secure-512-bit-secret-key-for-jwt-token-generation-and-validation-in-microservices
   expiration: 86400000
 
 # Logging Configuration
