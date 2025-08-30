@@ -39,8 +39,7 @@ public class ProductService {
         Product product = mapToEntity(productDTO);
         
         if (productDTO.getCategoryId() != null) {
-            Category category = categoryRepository.findById(UUID.fromString(productDTO.getCategoryId()))
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+            Category category = resolveCategoryByIdOrSlug(productDTO.getCategoryId());
             product.setCategory(category);
         }
         
@@ -70,8 +69,7 @@ public class ProductService {
         product.setCompareAtPrice(productDTO.getCompareAtPrice());
         
         if (productDTO.getCategoryId() != null) {
-            Category category = categoryRepository.findById(UUID.fromString(productDTO.getCategoryId()))
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+            Category category = resolveCategoryByIdOrSlug(productDTO.getCategoryId());
             product.setCategory(category);
         }
         
@@ -215,5 +213,26 @@ public class ProductService {
                 .replaceAll("\\s+", "-")
                 .replaceAll("-+", "-")
                 .replaceAll("^-|-$", "");
+    }
+    
+    private Category resolveCategoryByIdOrSlug(String identifier) {
+        if (identifier == null || identifier.trim().isEmpty()) {
+            throw new BusinessException("INVALID_CATEGORY", "Category identifier cannot be null or empty");
+        }
+        
+        // First, try to parse as UUID
+        try {
+            UUID categoryId = UUID.fromString(identifier);
+            return categoryRepository.findById(categoryId)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Category not found with ID: " + identifier));
+        } catch (IllegalArgumentException e) {
+            // Not a valid UUID, try to find by slug
+            log.debug("Category identifier '{}' is not a valid UUID, searching by slug", identifier);
+            return categoryRepository.findBySlug(identifier)
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Category not found with slug: " + identifier + 
+                            ". Please use a valid UUID or an existing category slug."));
+        }
     }
 }
