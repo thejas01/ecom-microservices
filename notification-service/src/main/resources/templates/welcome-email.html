@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to ${companyName}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .welcome-text {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .content {
+            background-color: #ffffff;
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 0 0 8px 8px;
+        }
+        .feature-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .feature {
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        .feature::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .button {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: #667eea;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .promo-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .promo-code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #d63031;
+            margin: 10px 0;
+        }
+        .social-links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .social-links a {
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img th:src="${logoUrl}" alt="${companyName}" style="max-width: 150px; height: auto;" />
+        <div class="welcome-text">Welcome!</div>
+        <p style="font-size: 18px;">We're thrilled to have you join our community</p>
+    </div>
+    
+    <div class="content">
+        <p>Hi <strong th:text="${customerName}">there</strong>,</p>
+        
+        <p>Welcome to <span th:text="${companyName}">E-Commerce Platform</span>! 
+        We're excited to have you as part of our growing community of happy shoppers.</p>
+        
+        <p>Your account has been created successfully with the email: 
+        <strong th:text="${email}">user@example.com</strong></p>
+        
+        <div class="feature-box">
+            <h2>What you can do now:</h2>
+            <div class="feature">Browse thousands of products across multiple categories</div>
+            <div class="feature">Save your favorite items to your wishlist</div>
+            <div class="feature">Track your orders in real-time</div>
+            <div class="feature">Enjoy fast and secure checkout</div>
+            <div class="feature">Get exclusive member-only deals</div>
+        </div>
+        
+        <div class="promo-box">
+            <h3>🎁 Special Welcome Gift!</h3>
+            <p>As a thank you for joining us, here's a special discount code for your first purchase:</p>
+            <div class="promo-code">WELCOME10</div>
+            <p>Get 10% off your first order!</p>
+            <p style="font-size: 12px; color: #666;">Valid for 30 days from registration</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <a th:href="${websiteUrl}" class="button">Start Shopping Now</a>
+        </div>
+        
+        <h3>Need Help Getting Started?</h3>
+        <ul>
+            <li><a th:href="${websiteUrl} + '/help/getting-started'">Getting Started Guide</a></li>
+            <li><a th:href="${websiteUrl} + '/help/faq'">Frequently Asked Questions</a></li>
+            <li><a th:href="${websiteUrl} + '/contact'">Contact Customer Support</a></li>
+        </ul>
+        
+        <h3>Stay Connected</h3>
+        <p>Follow us on social media for the latest updates, exclusive deals, and more!</p>
+        
+        <div class="social-links">
+            <a href="https://facebook.com/ecommerce">📘 Facebook</a>
+            <a href="https://twitter.com/ecommerce">🐦 Twitter</a>
+            <a href="https://instagram.com/ecommerce">📷 Instagram</a>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Questions? We're here to help!</p>
+        <p>Email: <a th:href="'mailto:' + ${supportEmail}" th:text="${supportEmail}">support@ecommerce.com</a></p>
+        <p>
+            <a th:href="${websiteUrl} + '/privacy'">Privacy Policy</a> | 
+            <a th:href="${websiteUrl} + '/terms'">Terms of Service</a> | 
+            <a th:href="${websiteUrl} + '/unsubscribe'">Unsubscribe</a>
+        </p>
+        <p>&copy; <span th:text="${currentYear}">2024</span> <span th:text="${companyName}">E-Commerce Platform</span>. All rights reserved.</p>
+    </div>
+</body>
+</html>

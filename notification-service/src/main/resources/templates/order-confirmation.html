@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .logo {
+            max-width: 150px;
+            height: auto;
+        }
+        .content {
+            background-color: #ffffff;
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 0 0 8px 8px;
+        }
+        .order-details {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .item-list {
+            margin: 20px 0;
+        }
+        .item {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 10px 0;
+        }
+        .item:last-child {
+            border-bottom: none;
+        }
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+            text-align: right;
+            margin-top: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img th:src="${logoUrl}" alt="${companyName}" class="logo" />
+        <h1>Order Confirmation</h1>
+    </div>
+    
+    <div class="content">
+        <p>Dear <span th:text="${customerName}">Customer</span>,</p>
+        
+        <p>Thank you for your order! We're excited to confirm that we've received your order and it's being processed.</p>
+        
+        <div class="order-details">
+            <h2>Order Details</h2>
+            <p><strong>Order Number:</strong> <span th:text="${orderNumber}">ORDER-123456</span></p>
+            <p><strong>Order Date:</strong> <span th:text="${formattedDate}">January 1, 2024</span></p>
+            <p><strong>Total Items:</strong> <span th:text="${itemCount}">0</span></p>
+        </div>
+        
+        <div class="item-list" th:if="${items}">
+            <h3>Items Ordered:</h3>
+            <div th:each="item : ${items}" class="item">
+                <strong th:text="${item.name}">Product Name</strong><br>
+                Quantity: <span th:text="${item.quantity}">1</span> × 
+                $<span th:text="${item.price}">0.00</span> = 
+                $<span th:text="${item.subtotal}">0.00</span>
+            </div>
+        </div>
+        
+        <div class="total">
+            Total: $<span th:text="${totalAmount}">0.00</span>
+        </div>
+        
+        <div style="text-align: center;">
+            <a th:href="${websiteUrl} + '/orders/' + ${orderId}" class="button">View Order Details</a>
+        </div>
+        
+        <h3>What's Next?</h3>
+        <ul>
+            <li>We'll send you an email when your order ships</li>
+            <li>You can track your order status anytime by clicking the button above</li>
+            <li>Most orders ship within 1-2 business days</li>
+        </ul>
+        
+        <p>If you have any questions about your order, please don't hesitate to contact our customer support team.</p>
+    </div>
+    
+    <div class="footer">
+        <p>Thank you for shopping with <span th:text="${companyName}">E-Commerce Platform</span>!</p>
+        <p>
+            <a th:href="'mailto:' + ${supportEmail}" th:text="${supportEmail}">support@ecommerce.com</a> | 
+            <a th:href="${websiteUrl}" th:text="${websiteUrl}">www.ecommerce.com</a>
+        </p>
+        <p>&copy; <span th:text="${currentYear}">2024</span> <span th:text="${companyName}">E-Commerce Platform</span>. All rights reserved.</p>
+    </div>
+</body>
+</html>

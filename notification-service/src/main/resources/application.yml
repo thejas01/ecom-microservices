@@ -1,0 +1,146 @@
+spring:
+  application:
+    name: notification-service
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/e_com
+    username: postgres
+    password: 123456
+    driver-class-name: org.postgresql.Driver
+    
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+    
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+    validate-on-migrate: false
+    
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      properties:
+        session.timeout.ms: 30000
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      retries: 3
+      
+  # Email configuration - disabled for mock mode
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL_USERNAME:noreply@ecommerce.com}
+    password: ${EMAIL_PASSWORD:mockpassword}
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+            required: false
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    test-connection: false
+    
+  # Thymeleaf configuration for email templates
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
+    
+  # Security configuration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI:}
+
+# Server configuration
+server:
+  port: 8089
+  
+# Eureka configuration
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+# Management endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# JWT configuration
+jwt:
+  secret: your-super-secure-512-bit-secret-key-for-jwt-token-generation-and-validation-in-microservices
+
+# Logging configuration
+logging:
+  level:
+    com.ecommerce.notification: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.kafka: INFO
+    org.springframework.mail: DEBUG
+    org.thymeleaf: INFO
+    
+# Notification service configuration
+notification:
+  email:
+    mock-mode: true # Set to false in production
+    from-name: E-Commerce Platform
+    max-retry-attempts: 3
+    retry-delay-ms: 60000
+    
+  sms:
+    mock-mode: true # Set to false in production
+    provider: twilio # Options: twilio, nexmo, aws-sns
+    from-number: +1234567890
+    api-key: ${SMS_API_KEY:}
+    api-secret: ${SMS_API_SECRET:}
+    
+  template:
+    company-name: E-Commerce Platform
+    support-email: support@ecommerce.com
+    website-url: https://www.ecommerce.com
+    logo-url: https://www.ecommerce.com/logo.png
+    
+  cleanup:
+    enabled: true
+    retention-days: 30
+    cron: "0 0 2 * * *" # Daily at 2 AM
+    
+  batch:
+    size: 100
+    thread-pool-size: 5
+    
+# Async configuration
+async:
+  core-pool-size: 10
+  max-pool-size: 20
+  queue-capacity: 500
+  thread-name-prefix: notification-async-

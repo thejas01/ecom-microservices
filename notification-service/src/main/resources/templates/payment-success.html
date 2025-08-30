@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #28a745;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        .content {
+            background-color: #ffffff;
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 0 0 8px 8px;
+        }
+        .payment-details {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .security-notice {
+            background-color: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="success-icon">✓</div>
+        <h1>Payment Successful!</h1>
+    </div>
+    
+    <div class="content">
+        <p>Dear <span th:text="${customerName}">Customer</span>,</p>
+        
+        <p>Great news! Your payment has been processed successfully.</p>
+        
+        <div class="payment-details">
+            <h2>Payment Details</h2>
+            <div class="detail-row">
+                <span><strong>Transaction ID:</strong></span>
+                <span th:text="${transactionId}">TXN-123456789</span>
+            </div>
+            <div class="detail-row">
+                <span><strong>Order ID:</strong></span>
+                <span th:text="${orderId}">ORDER-123456</span>
+            </div>
+            <div class="detail-row">
+                <span><strong>Payment Date:</strong></span>
+                <span th:text="${paymentDate}">January 1, 2024 10:30</span>
+            </div>
+            <div class="detail-row">
+                <span><strong>Payment Method:</strong></span>
+                <span th:text="${paymentMethod}">Credit Card</span>
+            </div>
+            <div class="detail-row">
+                <span><strong>Amount Paid:</strong></span>
+                <span class="amount"><span th:text="${currency}">USD</span> <span th:text="${amount}">0.00</span></span>
+            </div>
+        </div>
+        
+        <div style="text-align: center;">
+            <a th:href="${websiteUrl} + '/orders/' + ${orderId}" class="button">View Order Status</a>
+        </div>
+        
+        <div class="security-notice">
+            <strong>🔒 Security Notice:</strong> This transaction was processed securely. 
+            If you did not authorize this payment, please contact our support team immediately.
+        </div>
+        
+        <h3>What happens next?</h3>
+        <ul>
+            <li>You'll receive an order confirmation email shortly</li>
+            <li>We'll begin processing your order right away</li>
+            <li>You'll receive shipping updates via email</li>
+            <li>A receipt has been sent to your registered email address</li>
+        </ul>
+        
+        <p>Thank you for your purchase! We appreciate your business and look forward to serving you again.</p>
+    </div>
+    
+    <div class="footer">
+        <p>Need help? Contact us at <a th:href="'mailto:' + ${supportEmail}" th:text="${supportEmail}">support@ecommerce.com</a></p>
+        <p>
+            <a th:href="${websiteUrl}">Visit our website</a> | 
+            <a th:href="${websiteUrl} + '/account'">My Account</a> | 
+            <a th:href="${websiteUrl} + '/help'">Help Center</a>
+        </p>
+        <p>&copy; <span th:text="${currentYear}">2024</span> <span th:text="${companyName}">E-Commerce Platform</span>. All rights reserved.</p>
+    </div>
+</body>
+</html>
