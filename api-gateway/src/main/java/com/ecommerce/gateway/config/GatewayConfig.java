@@ -24,9 +24,9 @@ public class GatewayConfig {
                 
                 // User Service - Protected routes
                 .route("user-service", r -> r
-                        .path("/api/users/**")
+                        .path("/api/users", "/api/users/**")
                         .filters(f -> f
-                                .rewritePath("/api/users/(?<path>.*)", "/users/${path}")
+                                .rewritePath("/api/users(?<path>/.*)?", "/users${path}")
                                 .filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://USER-SERVICE"))
                 
@@ -78,19 +78,33 @@ public class GatewayConfig {
                                 .filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://ORDER-SERVICE"))
                 
+                // Payment Service - Public health endpoint
+                .route("payment-service-health", r -> r
+                        .path("/api/payments/health")
+                        .filters(f -> f
+                                .rewritePath("/api/payments/(?<path>.*)", "/payments/${path}"))
+                        .uri("lb://PAYMENT-SERVICE"))
+                
                 // Payment Service - Protected routes
                 .route("payment-service", r -> r
-                        .path("/api/payments/**")
+                        .path("/api/payments", "/api/payments/**")
                         .filters(f -> f
-                                .rewritePath("/api/payments/(?<path>.*)", "/payments/${path}")
+                                .rewritePath("/api/payments(?<path>/.*)?", "/payments${path}")
                                 .filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://PAYMENT-SERVICE"))
                 
+                // Notification Service - Public health endpoint
+                .route("notification-service-health", r -> r
+                        .path("/api/notifications/health")
+                        .filters(f -> f
+                                .rewritePath("/api/notifications/(?<path>.*)", "/notifications/${path}"))
+                        .uri("lb://NOTIFICATION-SERVICE"))
+                
                 // Notification Service - Protected routes
                 .route("notification-service", r -> r
-                        .path("/api/notifications/**")
+                        .path("/api/notifications", "/api/notifications/**")
                         .filters(f -> f
-                                .rewritePath("/api/notifications/(?<path>.*)", "/notifications/${path}")
+                                .rewritePath("/api/notifications(?<path>/.*)?", "/notifications${path}")
                                 .filter(authenticationFilter.apply(new AuthenticationFilter.Config())))
                         .uri("lb://NOTIFICATION-SERVICE"))
                 
