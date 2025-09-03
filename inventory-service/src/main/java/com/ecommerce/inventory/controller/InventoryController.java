@@ -90,6 +90,107 @@ public class InventoryController {
         return ResponseEntity.ok(Map.of("inStock", inStock));
     }
 
+    // Bulk reservation endpoints for order service integration
+    @PostMapping("/reserve")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'SYSTEM', 'USER')")
+    public ResponseEntity<Map<String, Object>> reserveInventoryBulk(@RequestBody Map<String, Object> request) {
+        String productId = (String) request.get("productId");
+        Integer quantity = (Integer) request.get("quantity");
+        String orderId = (String) request.get("orderId");
+        
+        log.info("Bulk reserving inventory for product: {} quantity: {} order: {}", productId, quantity, orderId);
+        
+        try {
+            boolean reserved = inventoryService.reserveStock(productId, quantity);
+            if (reserved) {
+                return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "Inventory reserved successfully",
+                    "productId", productId,
+                    "quantity", quantity,
+                    "orderId", orderId
+                ));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", "Insufficient inventory available",
+                    "productId", productId,
+                    "quantity", quantity,
+                    "orderId", orderId
+                ));
+            }
+        } catch (Exception e) {
+            log.error("Error reserving inventory for product: {} quantity: {} order: {}", productId, quantity, orderId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                "success", false,
+                "message", "Error reserving inventory: " + e.getMessage(),
+                "productId", productId,
+                "quantity", quantity,
+                "orderId", orderId
+            ));
+        }
+    }
+
+    @PostMapping("/release")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'SYSTEM', 'USER')")
+    public ResponseEntity<Map<String, Object>> releaseInventoryBulk(@RequestBody Map<String, Object> request) {
+        String productId = (String) request.get("productId");
+        Integer quantity = (Integer) request.get("quantity");
+        String orderId = (String) request.get("orderId");
+        
+        log.info("Bulk releasing inventory for product: {} quantity: {} order: {}", productId, quantity, orderId);
+        
+        try {
+            inventoryService.releaseReservedStock(productId, quantity);
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Inventory released successfully",
+                "productId", productId,
+                "quantity", quantity,
+                "orderId", orderId
+            ));
+        } catch (Exception e) {
+            log.error("Error releasing inventory for product: {} quantity: {} order: {}", productId, quantity, orderId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                "success", false,
+                "message", "Error releasing inventory: " + e.getMessage(),
+                "productId", productId,
+                "quantity", quantity,
+                "orderId", orderId
+            ));
+        }
+    }
+
+    @PostMapping("/confirm")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'SYSTEM', 'USER')")
+    public ResponseEntity<Map<String, Object>> confirmInventoryBulk(@RequestBody Map<String, Object> request) {
+        String productId = (String) request.get("productId");
+        Integer quantity = (Integer) request.get("quantity");
+        String orderId = (String) request.get("orderId");
+        
+        log.info("Bulk confirming inventory for product: {} quantity: {} order: {}", productId, quantity, orderId);
+        
+        try {
+            inventoryService.confirmStockReduction(productId, quantity);
+            return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Inventory confirmed successfully",
+                "productId", productId,
+                "quantity", quantity,
+                "orderId", orderId
+            ));
+        } catch (Exception e) {
+            log.error("Error confirming inventory for product: {} quantity: {} order: {}", productId, quantity, orderId, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+                "success", false,
+                "message", "Error confirming inventory: " + e.getMessage(),
+                "productId", productId,
+                "quantity", quantity,
+                "orderId", orderId
+            ));
+        }
+    }
+
     @GetMapping("/health")
     public ResponseEntity<String> health() {
         return ResponseEntity.ok("Inventory service is healthy");

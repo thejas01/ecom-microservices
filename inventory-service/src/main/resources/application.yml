@@ -93,7 +93,7 @@ logging:
 
 # JWT Configuration
 jwt:
-  secret: ${JWT_SECRET:your-256-bit-secret-key-for-jwt-token-generation}
+  secret: ${JWT_SECRET:your-super-secure-512-bit-secret-key-for-jwt-token-generation-and-validation-in-microservices}
   expiration: 86400000 # 24 hours
   header: Authorization
   prefix: Bearer
