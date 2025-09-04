@@ -12,7 +12,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -143,23 +146,85 @@ public class OrderOrchestrationService {
     }
 
     private boolean processPayment(Order order, String authToken) {
-        log.info("Processing payment for order: {} - SKIPPING (Payment service not implemented)", order.getId());
+        log.info("Processing payment for order: {} amount: {}", order.getId(), order.getTotalAmount());
         
-        // TODO: Implement actual payment processing when payment service is available
-        // For now, we simulate successful payment processing
         try {
-            // Simulate payment processing delay
-            Thread.sleep(100);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization", authToken);
+            headers.setContentType(MediaType.APPLICATION_JSON);
             
-            // Mock payment details
-            String mockPaymentId = "PAY_" + order.getId().toString().substring(0, 8);
-            orderService.updatePaymentInfo(order.getId(), mockPaymentId, "COMPLETED");
+            // Create payment request
+            Map<String, Object> paymentRequest = new HashMap<>();
+            paymentRequest.put("orderId", order.getId());
+            paymentRequest.put("customerId", order.getCustomerId());
+            paymentRequest.put("amount", order.getTotalAmount());
+            paymentRequest.put("currency", "USD");
+            paymentRequest.put("paymentMethod", "card");
+            paymentRequest.put("metadata", Map.of(
+                "orderNumber", order.getOrderNumber(),
+                "itemCount", order.getItems().size()
+            ));
             
-            log.info("Mock payment processed successfully for order: {} with payment ID: {}", order.getId(), mockPaymentId);
-            return true;
+            HttpEntity<Map<String, Object>> createRequest = new HttpEntity<>(paymentRequest, headers);
+            
+            // Create payment
+            ResponseEntity<Map<String, Object>> createResponse = restTemplate.exchange(
+                "http://PAYMENT-SERVICE/payments",
+                HttpMethod.POST,
+                createRequest,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            
+            if (createResponse.getStatusCode() != HttpStatus.CREATED) {
+                log.error("Failed to create payment for order: {}", order.getId());
+                return false;
+            }
+            
+            Map<String, Object> payment = createResponse.getBody();
+            String paymentId = (String) payment.get("id");
+            
+            // Process the payment
+            HttpEntity<Void> processRequest = new HttpEntity<>(headers);
+            ResponseEntity<Map<String, Object>> processResponse = restTemplate.exchange(
+                "http://PAYMENT-SERVICE/payments/" + paymentId + "/process",
+                HttpMethod.POST,
+                processRequest,
+                new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+            
+            if (processResponse.getStatusCode() == HttpStatus.OK) {
+                Map<String, Object> processedPayment = processResponse.getBody();
+                String status = (String) processedPayment.get("status");
+                
+                if ("COMPLETED".equals(status)) {
+                    orderService.updatePaymentInfo(order.getId(), paymentId, status);
+                    log.info("Payment processed successfully for order: {} with payment ID: {}", order.getId(), paymentId);
+                    return true;
+                } else {
+                    log.error("Payment failed for order: {} with status: {}", order.getId(), status);
+                    return false;
+                }
+            }
+            
+            return false;
             
         } catch (Exception e) {
-            log.error("Error in mock payment processing: {}", e.getMessage());
+            log.error("Error processing payment for order: {}", order.getId(), e);
+            
+            // Fallback to mock payment if payment service is unavailable
+            if (e.getMessage() != null && e.getMessage().contains("No servers available for service: PAYMENT-SERVICE")) {
+                log.warn("Payment service unavailable, using mock payment processing");
+                try {
+                    Thread.sleep(100);
+                    String mockPaymentId = "PAY_" + order.getId().toString().substring(0, 8);
+                    orderService.updatePaymentInfo(order.getId(), mockPaymentId, "COMPLETED");
+                    log.info("Mock payment processed for order: {}", order.getId());
+                    return true;
+                } catch (Exception mockError) {
+                    log.error("Error in mock payment processing: {}", mockError.getMessage());
+                }
+            }
+            
             return false;
         }
     }

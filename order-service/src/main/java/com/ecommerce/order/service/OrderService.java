@@ -169,6 +169,12 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
+    public Page<Order> getAllOrders(Pageable pageable) {
+        log.debug("Fetching all orders with pagination");
+        return orderRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
     public Long getOrderCountByCustomer(String customerId) {
         return orderRepository.countOrdersByCustomerId(customerId);
     }

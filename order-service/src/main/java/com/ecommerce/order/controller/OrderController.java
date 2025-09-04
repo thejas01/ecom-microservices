@@ -173,6 +173,23 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<Page<Order>> getAllOrders(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "DESC") String sortDirection) {
+        
+        log.info("Fetching all orders - page: {}, size: {}", page, size);
+        
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+        
+        Page<Order> orders = orderService.getAllOrders(pageable);
+        return ResponseEntity.ok(orders);
+    }
+
     @GetMapping("/health")
     public ResponseEntity<Map<String, String>> health() {
         Map<String, String> health = new HashMap<>();
