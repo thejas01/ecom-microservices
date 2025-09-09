@@ -29,12 +29,19 @@ spring:
           filters:
             - RewritePath=/api/(?<path>.*), /${path}
         
-        - id: inventory-service
+        - id: inventory-service-public
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/api/inventory/health
+          filters:
+            - RewritePath=/api/(?<segment>.*), /${segment}
+        
+        - id: inventory-service-protected
           uri: lb://INVENTORY-SERVICE
           predicates:
             - Path=/api/inventory/**
           filters:
-            - RewritePath=/api/inventory/(?<path>.*), /${path}
+            - RewritePath=/api/(?<segment>.*), /${segment}
             - name: AuthenticationFilter
         
         - id: order-service
@@ -42,7 +49,7 @@ spring:
           predicates:
             - Path=/api/orders/**
           filters:
-            - RewritePath=/api/orders/(?<path>.*), /${path}
+            - RewritePath=/api/(?<segment>.*), /${segment}
             - name: AuthenticationFilter
         
         - id: payment-service
@@ -52,6 +59,13 @@ spring:
           filters:
             - RewritePath=/api/payments/(?<path>.*), /${path}
             - name: AuthenticationFilter
+        
+        - id: notification-service-public
+          uri: lb://NOTIFICATION-SERVICE
+          predicates:
+            - Path=/api/notifications/health
+          filters:
+            - RewritePath=/api/notifications/(?<path>.*), /${path}
         
         - id: notification-service
           uri: lb://NOTIFICATION-SERVICE
@@ -73,7 +87,7 @@ spring:
             allow-credentials: true
 
 jwt:
-  secret: mySecretKey
+  secret: your-super-secure-512-bit-secret-key-for-jwt-token-generation-and-validation-in-microservices
   expiration: 86400000
 
 resilience4j:
