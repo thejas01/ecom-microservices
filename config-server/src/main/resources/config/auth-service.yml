@@ -31,7 +31,7 @@ spring:
     locations: classpath:db/migration
 
 jwt:
-  secret: ecommerceSecretKey2024!@#
+  secret: your-super-secure-512-bit-secret-key-for-jwt-token-generation-and-validation-in-microservices 
   expiration: 86400000 # 24 hours
   refresh-expiration: 604800000 # 7 days
 
