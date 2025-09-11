@@ -44,7 +44,7 @@ kafka:
     profile-updated: profile-updated-topic
 
 jwt:
-  secret: ecommerceSecretKey2024!@#
+  secret: your-super-secure-512-bit-secret-key-for-jwt-token-generation-and-validation-in-microservices 
   expiration: 86400000 # 24 hours
 
 user:
