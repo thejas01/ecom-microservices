@@ -21,6 +21,7 @@
         <kafka.version>3.4.1</kafka.version>
         <junit.version>5.9.3</junit.version>
         <testcontainers.version>1.19.1</testcontainers.version>
+        <lombok.version>1.18.30</lombok.version>
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
         <maven.surefire.plugin.version>3.0.0</maven.surefire.plugin.version>
     </properties>
